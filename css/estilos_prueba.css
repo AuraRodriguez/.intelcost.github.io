@@ -1,0 +1,32 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 8/08/2020, 05:50:56 PM
+    Author     : aura
+*/
+.list{ 
+width: 70%; 
+font-size: small;
+display: inline-block;
+ box-shadow: 3px 3px 3px gray;
+}
+span{
+    font-family: fantasy;
+    font-size: 15px;
+    padding-left: 10px;
+}
+.img{
+    width: 30%;
+    background: url("../img/home.jpg");
+    min-height: 125px;
+    background-size: cover;
+    background-position: left;
+  display: inline-block;
+   box-shadow: 3px 3px 3px gray;
+}
+#bienes{
+    width: 100%;
+}

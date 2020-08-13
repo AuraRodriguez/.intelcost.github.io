@@ -12,13 +12,6 @@
   <link  type="text/css" rel="stylesheet" href="css/estilos_prueba.css">
    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Formulario</title>
-  
-  <script type="text/javascript">
-    $(document).ready(function() {
-    
-});
-</script>
-
 </head>
 <body >
   <video src="img/video.mp4" id="vidFondo"></video>
@@ -92,20 +85,51 @@
     <script type="text/javascript">
       $( document ).ready(function() {
           $( "#tabs" ).tabs();
-                 
+        /*$.getJSON( "data-1.json" , function(data){   
+        var ciudad = data.map(function (ciudades) { 
+            return ciudades.Ciudad
+        });
+        var sorted = ciudad.sort();
+
+      var unique = sorted.filter(function (value, index) {
+        return value !== sorted[index + 1];
+           });
+       })*/
+        
         $.getJSON( "data-1.json" , function(data){
-         $.each(data, function(i) {
-        console.log(data[i])
-        var ciudad='<option value="'+data[i].Ciudad+'">'+data[i].Ciudad+'</option>';
+        
+        var ciudad = data.map(function (ciudades) { 
+            return ciudades.Ciudad
+        });
+        var sorted = ciudad.sort();
+        var unicaCiudad = sorted.filter(function (value, index) {
+        return value !== sorted[index + 1]; 
+        });
+        
+        var tipo = data.map(function (tipo) { 
+            return tipo.Tipo
+        });
+        var sortedT = tipo.sort();
+        var tipoUnico = sortedT.filter(function (value, index) {
+        return value !== sortedT[index + 1]; 
+        });
+        
+      for(var i=0;i< unicaCiudad.length;i++){
+         var ciudad='<option value="'+unicaCiudad[i]+'">'+unicaCiudad[i]+'</option>';  
         $("#selectCiudad").append(ciudad);
-        $("#selectTipo").append('<option value="'+data[i].Tipo+'">'+data[i].Tipo+'</option>');
-        console.log(ciudad)
+         }
+         for(var i=0;i< tipoUnico.length;i++){
+        $("#selectTipo").append('<option value="'+tipoUnico[i]+'">'+tipoUnico[i]+'</option>');
+           }
+         $.each(data, function(i) {
+        //console.log(data[i])
+        //console.log(ciudad)
         var bienes='<div class="img"></div><div class="list"><span>Dirección:</span> '+data[i].Direccion;
         bienes +='<br><span>Ciudad:</span> '+data[i].Ciudad;
         bienes +='<br><span>Telefóno:</span> '+data[i].Telefono;
         bienes +='<br><span>Código postal</span> '+data[i].Codigo_Postal;
-        bienes +='<br><span>Tipo:</span> '+data[i].Direccion;
-        bienes +='<br><span>Precio:</span> '+data[i].Direccion;
+        bienes +='<br><span>Tipo:</span> '+data[i].Tipo;
+        bienes +='<br><span>Precio:</span> '+data[i].Precio;
         bienes +='</div>'
         $("#bienes").append(bienes);
          })
@@ -122,11 +146,38 @@
             // Mostramos un mensaje con la respuesta de 
             success: function(data) {
             	$('#bienesDB').append(data);
-                console.log(""+data)
+               // console.log(""+data)
             }
         })
 
          })
+         
+        
+         
+         $("#submitButton").click(function(){
+              $("#bienes").empty();
+             var ciudadselected= $("#selectCiudad").val();
+         var tiposelected=$("#selectTipo").val();
+         var precioSelected=$("#rangoPrecio").val().split(';');
+             $.getJSON( "data-1.json" , function(data){
+             $.each(data, function(i) {
+              var precioJson=data[i].Precio.replace("$","").replace(",","");   
+            // alert(ciudadselected +" "+tiposelected+ " "+precioSelected[0]+ " "+data[i].Precio+ " precioJson "+precioJson)
+           if(data[i].Ciudad==ciudadselected && data[i].Tipo==tiposelected && (precioJson >=precioSelected[0] && precioJson<= precioSelected[1] )){
+             var bienes='<div class="img"></div><div class="list"><span>Dirección:</span> '+data[i].Direccion;
+                bienes +='<br><span>Ciudad:</span> '+data[i].Ciudad;
+                bienes +='<br><span>Telefóno:</span> '+data[i].Telefono;
+                bienes +='<br><span>Código postal</span> '+data[i].Codigo_Postal;
+                bienes +='<br><span>Tipo:</span> '+data[i].Tipo;
+                bienes +='<br><span>Precio:</span> '+data[i].Precio;
+                bienes +='</div>'
+                $("#bienes").append(bienes);
+            }
+                
+          })
+      })//getJsin
+      return false;
+         })//button
          
       });
     </script>
